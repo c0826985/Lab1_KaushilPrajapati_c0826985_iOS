@@ -9,7 +9,6 @@ import UIKit
 
 class ViewController: UIViewController {
     
-  
     @IBOutlet weak var turnLbl: UILabel!
     @IBOutlet weak var r1: UIButton!
     @IBOutlet weak var r2: UIButton!
@@ -23,25 +22,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var nScoreLbl: UILabel!
     @IBOutlet weak var cScoreLbl: UILabel!
     
-    
-
-    
-    
-    enum Turn{
-        case Cross
-        case Nought
-    }
-    
-    var cScore = 0
-    var nScore = 0
-    
-    var fTurn = Turn.Cross
-    var cTurn = Turn.Cross
-    var CROSS = "X"
-    var NOUGHT = "O"
-    
-    var draw = [UIButton]()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         initDraw()
@@ -52,7 +32,20 @@ class ViewController: UIViewController {
         
         view.addGestureRecognizer(gesture)
     }
-
+    
+    //variables for storing score of X and O
+    var cScore = 0
+    var nScore = 0
+    
+    var fTurn = Turn.Cross
+    var cTurn = Turn.Cross
+    var CROSS = "X"
+    var NOUGHT = "O"
+    
+    
+    var draw = [UIButton]()
+    
+   // To Initialize the board
     func initDraw()
     {
         draw.append(r1)
@@ -66,20 +59,23 @@ class ViewController: UIViewController {
         draw.append(r9)
     }
     
-  
+    enum Turn{
+        case Cross
+        case Nought
+    }
+    
+    //function on tap action to verify who has won
     @IBAction func tap(_ sender: UIButton){
         add(sender)
         
         if check(CROSS){
             cScore += 1
             result(title:"Crosses has Won")
-            
         }
         
         if check(NOUGHT){
             nScore += 1
             result(title:"Noughts has Won")
-           
         }
         
         if(fullDraw())
@@ -92,6 +88,7 @@ class ViewController: UIViewController {
         
     }
     
+    //func to reset on swipeleftgesture
     @IBAction func swipeleft(_ sender: UISwipeGestureRecognizer) {
         
         for button in draw
@@ -112,6 +109,7 @@ class ViewController: UIViewController {
         cTurn = fTurn
     }
     
+    //func to be used to check who has won by getting combinations
     func check(_ s :String) -> Bool
     {
         //for Horizontal
@@ -155,12 +153,13 @@ class ViewController: UIViewController {
         return false
     }
     
+    //will get the string from the func check and returns true if exists
     func symbol(_ button: UIButton, _ sym: String) -> Bool
     {
         return button.title(for: .normal) == sym
     }
     
-    
+    //to show alert message after the game is over and also has a reset button which clears the board
     func result(title: String)
     {
         let msg  = "\nCross:" + String(cScore) + "\n\nNoughts:" + String(nScore)
@@ -173,7 +172,7 @@ class ViewController: UIViewController {
         
     }
     
-
+    //func for the reset button
     func resetDraw()
     {
         for button in draw
@@ -194,7 +193,7 @@ class ViewController: UIViewController {
         cTurn = fTurn
     }
     
-    
+    //to add X or O according to the turns
     func add(_ sender: UIButton)
     {
         if(sender.title(for: .normal) == nil)
