@@ -243,6 +243,7 @@ class ViewController: UIViewController{
         }
     }
     
+    
     func fullDraw() -> Bool
     {
         for button in draw
