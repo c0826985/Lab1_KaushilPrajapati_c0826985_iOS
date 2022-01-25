@@ -13,6 +13,7 @@ class ViewController: UIViewController{
         return true
     }
 
+    //for detecting the shake motion and undoing if the step on tic tac toe board is taken
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?){
         if motion == .motionShake {
             previousTurn?.setTitle(nil, for: .normal)
@@ -33,16 +34,16 @@ class ViewController: UIViewController{
         case Cross
         case Nought
     }
-    
     var cScore = 0
     var nScore = 0
-
     var fTurn = Turn.Cross
     var cTurn = Turn.Cross
     var CROSS = "X"
     var NOUGHT = "O"
-    
+    let def = " "
     var previousTurn: UIButton?
+    let storedDefaults = UserDefaults.standard // for storing defaults
+    
     
     @IBOutlet weak var turnLbl: UILabel!
     @IBOutlet weak var r1: UIButton!
@@ -68,6 +69,15 @@ class ViewController: UIViewController{
         view.addGestureRecognizer(gesture)
     }
     
+   
+    //for retrieving defaults on the view appear
+    override func viewDidAppear(_ animated: Bool) {
+        cScore = storedDefaults.integer(forKey: "cScore")
+        nScore = storedDefaults.integer(forKey: "nScore")
+        cScoreLbl.text = "Cross :" + String(storedDefaults.string(forKey: "cScore") ?? def)
+        nScoreLbl.text = "Noughts :" + String(storedDefaults.string(forKey: "nScore") ?? def)
+    }
+    
     //variables for storing score of X and O
    
     
@@ -85,14 +95,13 @@ class ViewController: UIViewController{
         draw.append(r7)
         draw.append(r8)
         draw.append(r9)
+        
     }
-    
-   
     
     //function on tap action to verify who has won
     @IBAction func tap(_ sender: UIButton){
         previousTurn = sender
-        
+      
         add(sender)
         if check(CROSS){
             cScore += 1
@@ -108,10 +117,12 @@ class ViewController: UIViewController{
         {
             result(title: "Result is Draw")
         }
-        cScoreLbl.text = "Cross:" + String(cScore)
-        nScoreLbl.text = "Noughts:"
-        + String(nScore)
         
+        //for setting and storing values in userdefaults for specific key
+        storedDefaults.set(cScore, forKey: "cScore")
+        storedDefaults.set(nScore, forKey: "nScore")
+        cScoreLbl.text = "Cross :" + String(storedDefaults.string(forKey: "cScore") ?? def)
+        nScoreLbl.text = "Noughts :" + String(storedDefaults.string(forKey: "nScore") ?? def)
     }
     
     //func to reset on swipeleftgesture
