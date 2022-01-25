@@ -7,7 +7,42 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController{
+    
+    override func becomeFirstResponder() -> Bool {
+        return true
+    }
+
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?){
+        if motion == .motionShake {
+            previousTurn?.setTitle(nil, for: .normal)
+                if(cTurn == Turn.Nought)
+                {
+                cTurn = Turn.Cross
+                turnLbl.text = CROSS
+                }
+                else
+                {
+                cTurn = Turn.Nought
+                turnLbl.text = NOUGHT
+                }
+        }
+    }
+        
+    enum Turn{
+        case Cross
+        case Nought
+    }
+    
+    var cScore = 0
+    var nScore = 0
+
+    var fTurn = Turn.Cross
+    var cTurn = Turn.Cross
+    var CROSS = "X"
+    var NOUGHT = "O"
+    
+    var previousTurn: UIButton?
     
     @IBOutlet weak var turnLbl: UILabel!
     @IBOutlet weak var r1: UIButton!
@@ -34,14 +69,7 @@ class ViewController: UIViewController {
     }
     
     //variables for storing score of X and O
-    var cScore = 0
-    var nScore = 0
-    
-    var fTurn = Turn.Cross
-    var cTurn = Turn.Cross
-    var CROSS = "X"
-    var NOUGHT = "O"
-    
+   
     
     var draw = [UIButton]()
     
@@ -59,15 +87,13 @@ class ViewController: UIViewController {
         draw.append(r9)
     }
     
-    enum Turn{
-        case Cross
-        case Nought
-    }
+   
     
     //function on tap action to verify who has won
     @IBAction func tap(_ sender: UIButton){
-        add(sender)
+        previousTurn = sender
         
+        add(sender)
         if check(CROSS){
             cScore += 1
             result(title:"Crosses has Won")
@@ -194,7 +220,7 @@ class ViewController: UIViewController {
     }
     
     //to add X or O according to the turns
-    func add(_ sender: UIButton)
+   func add(_ sender: UIButton)
     {
         if(sender.title(for: .normal) == nil)
         {
@@ -211,7 +237,8 @@ class ViewController: UIViewController {
                 cTurn = Turn.Nought
                 turnLbl.text = NOUGHT
             }
-            sender.isEnabled = false
+            
+            
             
         }
     }
@@ -227,6 +254,7 @@ class ViewController: UIViewController {
         }
         return true
     }
+    
     
     
 }
